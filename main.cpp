@@ -64,6 +64,6 @@ int main(int argc, char **argv)
     if (encoding)
         encode(argv[2], argv[3], argv[4]);
     else
-        LOG(decode_text(argv[2], argv[3]));
+        decode_text(argv[2], argv[3]);
     return 0;
 }

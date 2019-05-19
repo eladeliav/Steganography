@@ -1,5 +1,11 @@
 #include "encode.hpp"
 
+std::ifstream::pos_type filesize(const char* filename)
+{
+    std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+    return in.tellg();
+}
+
 void encode(std::string in_im, std::string in_data, std::string out_im)
 {
     //reading input image
@@ -19,6 +25,12 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
         return;
     }
 
+    if(filesize((in_im.c_str())) < filesize(in_data.c_str()))
+    {
+        LOG("Image not big enough");
+        return;
+    }
+
     // current character from input file
     char ch;
     // get first char of input file
@@ -26,12 +38,16 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
     // current bit to work on
     int bit_count = 0;
     // reached EOF or not
-    bool last_null_char = false;
+    bool reachedEOF = false;
     // check if whole message is encoded
     bool encoded = false;
     // curren pixel
     cv::Vec3b pixel;
-    std::string message;
+
+    bool encodedFinal = false;
+    std::string finalMessage = FINAL_STRING;
+    int finalStringIndex = 0;
+
     for (int row = 0; row < image.rows; row++)
     {
         for (int col = 0; col < image.cols; col++)
@@ -58,24 +74,35 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
                 bit_count++;
 
                 // if reached end of file and we're on the last bit, then we finished encoding
-                if (last_null_char && bit_count == 8)
-                {
-                    encoded = true;
-                    goto OUT;
-                }
+//                if (reachedEOF && bit_count == 8 && encodedFinal)
+//                {
+//                    encoded = true;
+//                    goto OUT;
+//                }
 
                 // on last bit but we didn't finish the file, get next char
                 if (bit_count == 8)
                 {
                     bit_count = 0;
-                    message += ch;
-                    inFile.get(ch);
-
-                    // if EOF, then we need to encode the NULL char
+                    // if EOF, then we need to encode_text the NULL char
                     if (inFile.eof())
                     {
-                        last_null_char = true;
-                        ch = '\0';
+                        reachedEOF = true;
+                        if(finalStringIndex == finalMessage.length())
+                        {
+                            encoded = true;
+                            encodedFinal = true;
+                            goto OUT;
+                        }
+                        else
+                        {
+                            ch = finalMessage[finalStringIndex];
+                            finalStringIndex++;
+                        }
+                    }
+                    else
+                    {
+                        inFile.get(ch);
                     }
                 }
             }
@@ -84,13 +111,13 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
 
     OUT:;
 
-    // check if we managed to encode
+    // check if we managed to encode_text
     if (!encoded)
     {
-        std::cout << "Failed to encode, try bigger image" << std::endl;
+        std::cout << "Failed to encode_text, try bigger image" << std::endl;
         return;
     }
     // write steg image to system
-    //LOG("Successfully encoded image with " << message);
+    LOG("SUCCESSFULLY ENCODED GIVEN DATA AND OUTPUT TO " << out_im);
     cv::imwrite(out_im, image);
 }

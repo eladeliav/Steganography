@@ -3,6 +3,6 @@
 
 #include "steg.hpp"
 
-std::string decode(std::string in_im, std::string out_im);
+std::string decode_text(std::string in_im, std::string out_f);
 
 #endif /* DECODE_H */ 

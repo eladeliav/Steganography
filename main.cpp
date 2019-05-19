@@ -1,4 +1,6 @@
 #include "steg.hpp"
+#include "encode.hpp"
+#include "decode.hpp"
 
 #define ENCODE "encode"
 #define DECODE "decode"
@@ -19,14 +21,14 @@ int main(int argc, char **argv)
 {
     /*
 	argv[0] = ./steg
-    argv[1] = encode/decode
+    argv[1] = encode_text/decode_text
                 |       \
                 |        \
                 |         \
                 |          \
                 |           \
-                |           argv[1] = steganographic_image
-                |           argv[2] = output_data
+                |           argv[2] = steganographic_image
+                |           argv[3] = output_data
 	argv[2] = input_image
 	argv[3] = intput_data
 	argv[4] = output_image
@@ -62,6 +64,6 @@ int main(int argc, char **argv)
     if (encoding)
         encode(argv[2], argv[3], argv[4]);
     else
-        decode(argv[2], argv[3]);
+        LOG(decode_text(argv[2], argv[3]));
     return 0;
 }

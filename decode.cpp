@@ -1,6 +1,6 @@
 #include "decode.hpp"
 
-std::string decode(std::string in_im, std::string out_im)
+std::string decode_text(std::string in_im, std::string out_F)
 {
     std::string message = "";
     cv::Mat image = cv::imread(in_im);
@@ -9,12 +9,11 @@ std::string decode(std::string in_im, std::string out_im)
         return "IMAGE ERROR";
     }
 
-    //reading input data file
-    std::ofstream outFile(out_im);
+    std::ofstream outFile(out_F);
 
-    if (!outFile.is_open())
+    if(!outFile.is_open())
     {
-        return "input file error";
+        return "output file error";
     }
 
     //current char
@@ -23,6 +22,7 @@ std::string decode(std::string in_im, std::string out_im)
     int bit_count = 0;
     // current pixel
     cv::Vec3b pixel;
+    std::ostringstream buf;
     
     for(int row = 0; row < image.rows; row++)
     {
@@ -42,11 +42,15 @@ std::string decode(std::string in_im, std::string out_im)
 				if(bit_count == 8) {
 
 					// NULL char is encountered
-					if(ch == '\0')
+					if(buf.str().length() == LEN_OF_FINAL_STRING && buf.str() == FINAL_STRING)
 						goto OUT;
+					else if(buf.str().length() == LEN_OF_FINAL_STRING)
+					    buf.str("");
 
 					bit_count = 0;
-                    outFile.put(ch);
+					//message += ch;
+					outFile.put(ch);
+					buf << ch;
 					//std::cout << ch;
 					ch = 0;
 				}
@@ -58,5 +62,5 @@ std::string decode(std::string in_im, std::string out_im)
         }
     }
     OUT:;
-    return message;
+    return "SUCCESSFULLY OUTPUT DECODED DATA TO " + out_F;
 }

@@ -5,9 +5,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <string>
 
 #define LOG(x) std::cout << x << std::endl
 

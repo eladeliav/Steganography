@@ -71,5 +71,4 @@ void decode_text(std::string in_im, std::string out_F)
     outFile << message;
     outFile.close();
     LOG("SUCCESSFULLY OUTPUT DECODED DATA TO " << out_F);
-    return;
 }

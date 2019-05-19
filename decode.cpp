@@ -1,18 +1,20 @@
 #include "decode.hpp"
 
-std::string decode_text(std::string in_im, std::string out_F)
+void decode_text(std::string in_im, std::string out_F)
 {
     cv::Mat image = cv::imread(in_im);
     if (image.empty())
     {
-        return "IMAGE ERROR";
+        LOG("IMAGE ERROR");
+        return;
     }
 
     std::ofstream outFile(out_F);
 
     if(!outFile.is_open())
     {
-        return "output file error";
+        LOG("output file error");
+        return;
     }
 
     //current char
@@ -61,12 +63,13 @@ std::string decode_text(std::string in_im, std::string out_F)
 					ch = ch << 1;
 				}
                 
+                }
             }
-        }
     }
     OUT:;
     message = message.substr(0, message.rfind(FINAL_STRING) - 1);
     outFile << message;
     outFile.close();
-    return "SUCCESSFULLY OUTPUT DECODED DATA TO " + out_F;
+    LOG("SUCCESSFULLY OUTPUT DECODED DATA TO " << out_F);
+    return;
 }

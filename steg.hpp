@@ -12,6 +12,7 @@
 
 #define FINAL_STRING "END_OF_STEG"
 #define LEN_OF_FINAL_STRING 11
+#define MAX_BUF 1024
 
 #define LOG(x) std::cout << x << std::endl
 

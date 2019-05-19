@@ -2,7 +2,6 @@
 
 std::string decode_text(std::string in_im, std::string out_F)
 {
-    std::string message = "";
     cv::Mat image = cv::imread(in_im);
     if (image.empty())
     {
@@ -22,6 +21,7 @@ std::string decode_text(std::string in_im, std::string out_F)
     int bit_count = 0;
     // current pixel
     cv::Vec3b pixel;
+    std::string message = "";
     std::ostringstream buf;
     
     for(int row = 0; row < image.rows; row++)
@@ -42,14 +42,17 @@ std::string decode_text(std::string in_im, std::string out_F)
 				if(bit_count == 8) {
 
 					// NULL char is encountered
-					if(buf.str().length() == LEN_OF_FINAL_STRING && buf.str() == FINAL_STRING)
-						goto OUT;
-					else if(buf.str().length() == LEN_OF_FINAL_STRING)
-					    buf.str("");
+					if(buf.str().rfind(FINAL_STRING) != std::string::npos)
+                    {
+                        goto OUT;
+                    }
+					else if(buf.str().length() == MAX_BUF)
+                    {
+                        buf.str("");
+                    }
 
 					bit_count = 0;
-					//message += ch;
-					outFile.put(ch);
+					message += ch;
 					buf << ch;
 					//std::cout << ch;
 					ch = 0;
@@ -62,5 +65,8 @@ std::string decode_text(std::string in_im, std::string out_F)
         }
     }
     OUT:;
+    message = message.substr(0, message.rfind(FINAL_STRING) - 1);
+    outFile << message;
+    outFile.close();
     return "SUCCESSFULLY OUTPUT DECODED DATA TO " + out_F;
 }

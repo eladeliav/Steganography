@@ -120,4 +120,5 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
     // write steg image to system
     LOG("SUCCESSFULLY ENCODED GIVEN DATA AND OUTPUT TO " << out_im);
     cv::imwrite(out_im, image);
+    inFile.close();
 }

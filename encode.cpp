@@ -1,6 +1,6 @@
 #include "encode.hpp"
 
-std::ifstream::pos_type filesize(const char* filename)
+std::ifstream::pos_type filesize(const char *filename)
 {
     std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
     return in.tellg();
@@ -24,8 +24,8 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
         LOG("input file error");
         return;
     }
-
-    if(filesize((in_im.c_str())) < filesize(in_data.c_str()))
+    LOG("in_im filesize: " << filesize(in_im.c_str()) << ", in_data filesize: " << filesize(in_data.c_str()));
+    if (filesize((in_im.c_str())) < filesize(in_data.c_str()))
     {
         LOG("Image not big enough");
         return;
@@ -61,8 +61,7 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
                 if (isBitSet(ch, 7 - bit_count))
                 {
                     pixel.val[color] |= 1; // or with 1
-                }
-                else
+                } else
                 {
                     pixel.val[color] &= ~1; // and with inverse 1 (11111110)
                 }
@@ -88,19 +87,17 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
                     if (inFile.eof())
                     {
                         reachedEOF = true;
-                        if(finalStringIndex == finalMessage.length())
+                        if (finalStringIndex == finalMessage.length())
                         {
                             encoded = true;
                             encodedFinal = true;
                             goto OUT;
-                        }
-                        else
+                        } else
                         {
                             ch = finalMessage[finalStringIndex];
                             finalStringIndex++;
                         }
-                    }
-                    else
+                    } else
                     {
                         inFile.get(ch);
                     }

@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	argv[4] = output_image
 	*/
 
-    if(argc <= 1)
+    if (argc <= 1)
     {
         LOG("not enough params");
         return 1;

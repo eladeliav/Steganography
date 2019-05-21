@@ -16,6 +16,8 @@ void decode_text(std::string in_im, std::string out_F)
         LOG("output file error");
         return;
     }
+    // file size of encoded data
+    int fileSize = 0;
 
     //current char
     char ch = 0;
@@ -23,7 +25,7 @@ void decode_text(std::string in_im, std::string out_F)
     int bit_count = 0;
     // current pixel
     cv::Vec3b pixel;
-    std::string message = "";
+    std::string message;
     std::ostringstream buf;
 
     for (int row = 0; row < image.rows; row++)
@@ -43,7 +45,6 @@ void decode_text(std::string in_im, std::string out_F)
                 // bit_count is 8, that means we got our char from the encoded image
                 if (bit_count == 8)
                 {
-
                     // NULL char is encountered
                     if (buf.str().rfind(FINAL_STRING) != std::string::npos)
                     {

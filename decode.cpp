@@ -45,25 +45,25 @@ void decode_text(std::string in_im, std::string out_F)
                 // bit_count is 8, that means we got our char from the encoded image
                 if (bit_count == 8)
                 {
-                    if(receivedSize)
-                        currentSize++;
                     if(receivedSize && currentSize == fileSize)
                     {
-                        LOG("current size: " << currentSize << ", fileSize: " << fileSize << ", sizeof(buf): " << message.size());
                         goto OUT;
+                    }
+
+                    if(receivedSize)
+                    {
+                        currentSize++;
+                        message += ch;
+
+                    }else
+                    {
+                        sizeString += ch;
                     }
                     if(ch == '$' && !receivedSize)
                     {
                         fileSize = std::stoi(sizeString);
                         LOG("decoded file size: " << fileSize);
                         receivedSize = true;
-                    }
-                    if(receivedSize && ch != '$')
-                    {
-                        message += ch;
-                    }else
-                    {
-                        sizeString += ch;
                     }
                     bit_count = 0;
                     ch = 0;

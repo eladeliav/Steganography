@@ -30,7 +30,7 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
     }
 
     //reading input data file
-    std::ifstream inFile(in_data);
+    std::ifstream inFile(in_data, std::ifstream::binary);
 
     if (!inFile.is_open())
     {
@@ -44,7 +44,8 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
     }
 
     // data size
-    std::string sizeString = std::to_string(filesize(in_data.c_str()));
+    int size = filesize(in_data.c_str());
+    std::string sizeString = std::to_string(size);
     sizeString += "$";
     int sizeStringIndex = 0;
     bool encodedSize = false;
@@ -58,6 +59,7 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
     bool encoded = false;
     // current pixel
     cv::Vec3b pixel;
+    std::string stuffEncoded;
 
     for (int row = 0; row < image.rows; row++)
     {
@@ -78,18 +80,20 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
                 // on last bit but we didn't finish the file, get next char
                 if (bit_count == 8)
                 {
-                    encodedSize = sizeStringIndex == sizeString.length();
+                    encodedSize = sizeStringIndex == sizeString.length() - 1;
                     bit_count = 0;
-                    // if EOF, then we need to encode_text the NULL char
+                    stuffEncoded += ch;
                     if (inFile.eof())
                     {
                         encoded = true;
                         goto OUT;
+                    } else
+                    {
+                        if(encodedSize)
+                            inFile.get(ch);
+                        else
+                            ch = sizeString[++sizeStringIndex];
                     }
-                    if(encodedSize)
-                        inFile.get(ch);
-                    else
-                        ch = sizeString[++sizeStringIndex];
                 }
             }
         }

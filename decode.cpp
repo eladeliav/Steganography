@@ -9,7 +9,7 @@ void decode_text(std::string in_im, std::string out_F)
         return;
     }
 
-    std::ofstream outFile(out_F);
+    std::ofstream outFile(out_F, std::ofstream::binary);
 
     if (!outFile.is_open())
     {
@@ -49,7 +49,6 @@ void decode_text(std::string in_im, std::string out_F)
                     {
                         goto OUT;
                     }
-
                     if(receivedSize)
                     {
                         currentSize++;
@@ -65,6 +64,7 @@ void decode_text(std::string in_im, std::string out_F)
                         LOG("decoded file size: " << fileSize);
                         receivedSize = true;
                     }
+
                     bit_count = 0;
                     ch = 0;
                 } else
@@ -76,7 +76,6 @@ void decode_text(std::string in_im, std::string out_F)
     }
 
     OUT:;
-    //message = message.substr(0, message.rfind(FINAL_STRING) - 1);
     outFile << message;
     outFile.close();
     LOG("SUCCESSFULLY OUTPUT DECODED DATA TO " << out_F);

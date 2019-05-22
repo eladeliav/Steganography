@@ -49,7 +49,7 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
     sizeString += "$";
     int sizeStringIndex = 0;
     bool encodedSize = false;
-    LOG("Filesize of data: " << sizeString);
+    LOG("Filesize of data: " << size);
 
     // current character from input file
     char ch = sizeString.at(0);

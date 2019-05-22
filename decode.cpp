@@ -18,7 +18,8 @@ void decode_text(std::string in_im, std::string out_F)
     }
     // file size of encoded data
     int fileSize = 0;
-
+    bool receivedSize = false;
+    std::string sizeString;
     //current char
     char ch = 0;
     // current bit
@@ -26,7 +27,7 @@ void decode_text(std::string in_im, std::string out_F)
     // current pixel
     cv::Vec3b pixel;
     std::string message;
-    std::ostringstream buf;
+    int currentSize = 0;
 
     for (int row = 0; row < image.rows; row++)
     {
@@ -41,23 +42,30 @@ void decode_text(std::string in_im, std::string out_F)
 
                 // increment bit_count to work on next bit
                 bit_count++;
-
                 // bit_count is 8, that means we got our char from the encoded image
                 if (bit_count == 8)
                 {
-                    // NULL char is encountered
-                    if (buf.str().rfind(FINAL_STRING) != std::string::npos)
+                    if(receivedSize)
+                        currentSize++;
+                    if(receivedSize && currentSize == fileSize)
                     {
+                        LOG("current size: " << currentSize << ", fileSize: " << fileSize << ", sizeof(buf): " << message.size());
                         goto OUT;
-                    } else if (buf.str().length() == MAX_BUF)
-                    {
-                        buf.str("");
                     }
-
+                    if(ch == '$' && !receivedSize)
+                    {
+                        fileSize = std::stoi(sizeString);
+                        LOG("decoded file size: " << fileSize);
+                        receivedSize = true;
+                    }
+                    if(receivedSize && ch != '$')
+                    {
+                        message += ch;
+                    }else
+                    {
+                        sizeString += ch;
+                    }
                     bit_count = 0;
-                    message += ch;
-                    buf << ch;
-                    //std::cout << ch;
                     ch = 0;
                 } else
                 {
@@ -66,8 +74,9 @@ void decode_text(std::string in_im, std::string out_F)
             }
         }
     }
+
     OUT:;
-    message = message.substr(0, message.rfind(FINAL_STRING) - 1);
+    //message = message.substr(0, message.rfind(FINAL_STRING) - 1);
     outFile << message;
     outFile.close();
     LOG("SUCCESSFULLY OUTPUT DECODED DATA TO " << out_F);

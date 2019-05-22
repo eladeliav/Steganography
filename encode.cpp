@@ -37,7 +37,6 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
         LOG("input file error");
         return;
     }
-    //LOG("in_im filesize: " << filesize(in_im.c_str()) << ", in_data filesize: " << filesize(in_data.c_str()));
     if (filesize((in_im.c_str())) < filesize(in_data.c_str()))
     {
         LOG("Image not big enough");
@@ -46,8 +45,10 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
 
     // data size
     std::string sizeString = std::to_string(filesize(in_data.c_str()));
+    sizeString += "$";
     int sizeStringIndex = 0;
     bool encodedSize = false;
+    LOG("Filesize of data: " << sizeString);
 
     // current character from input file
     char ch = sizeString.at(0);

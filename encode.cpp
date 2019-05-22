@@ -19,7 +19,7 @@ void encodeBit(cv::Vec3b& pixel, int colorLayer , char ch, int pos)
     }
 }
 
-void encode(std::string in_im, std::string in_data, std::string out_im)
+void encode(std::string in_im, std::string in_data)
 {
     //reading input image
     cv::Mat image = cv::imread(in_im);
@@ -43,6 +43,8 @@ void encode(std::string in_im, std::string in_data, std::string out_im)
         return;
     }
 
+    // out im
+    std::string out_im = in_im.substr(0, in_im.rfind('.')) + "_steg.png";
     // data size
     int size = filesize(in_data.c_str());
     std::string sizeString = std::to_string(size);

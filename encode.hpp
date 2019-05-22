@@ -3,6 +3,6 @@
 
 #include "steg.hpp"
 
-void encode(std::string in_im, std::string in_data, std::string out_im);
+void encode(std::string in_im, std::string in_data);
 
 #endif /* ENCODE_H */ 

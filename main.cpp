@@ -4,7 +4,7 @@
 
 #define ENCODE "encode"
 #define DECODE "decode"
-#define ENCODE_PARAM_NUM 5
+#define ENCODE_PARAM_NUM 4
 #define DECODE_PARAM_NUM 4
 
 bool isBitSet(char ch, int pos)
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
 
     if (encoding)
-        encode(argv[2], argv[3], argv[4]);
+        encode(argv[2], argv[3]);
     else
         decode_text(argv[2], argv[3]);
     return 0;

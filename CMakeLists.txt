@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 3.0.0)
 project(steg VERSION 0.1.0)
 
 if (WIN32)
-    set(OpenCV_DIR "C:/opencv/opencv4/mingw-build/install")
+    set(OpenCV_DIR "C:/opencv/mingw-build/install")
 endif ()
 
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
 set(SOURCES

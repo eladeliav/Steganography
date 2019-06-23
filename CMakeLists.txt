@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(steg VERSION 0.1.0)
 
-if (WIN32)
-    set(OpenCV_DIR "C:/opencv/mingw-build/install")
-endif ()
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
@@ -17,6 +13,8 @@ set(SOURCES
         steg.hpp
         )
 
+message("$ENV{OPENCV_DIR}")
+set(OpenCV_DIR $ENV{OPENCV_DIR})
 set(OpenCV_STATIC ON)
 find_package(OpenCV REQUIRED)
 

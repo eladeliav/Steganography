@@ -10,7 +10,8 @@ CTestTestfile.cmake
 
 /build/*
 /.idea/*
-.vscode/*
+/.vscode
+/bin
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json

@@ -12,6 +12,7 @@ CTestTestfile.cmake
 /.idea/*
 /.vscode
 /bin
+.DS_Store
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
